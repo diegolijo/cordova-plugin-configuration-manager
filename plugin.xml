@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin version="1.0.0" id="cordova-plugin-configuration-manager"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <name>Configuration Manager</name>
+    <description>A Cordova plugin for managing configurations.</description>
+    <author email="diegolijo@gmail.com" href="http://vayapedal.com">Diego Santiago</author>
+    <license>MIT</license>
+
+    <repo>https://github.com/diegolijo/cordova-plugin-configuration-manager.git</repo>
+
+    <engines>
+        <engine name="cordova" version=">=10.0.0" />
+    </engines>
+
+    <js-module src="www/configuration-manager.js" name="ConfigurationManager">
+        <clobbers target="cordova.plugins.ConfigurationManager" />
+    </js-module>
+
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="ConfigurationManager">
+                <param name="android-package" value="com.vayapedal.configuration.ConfigurationManager" />
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/ConfigurationManager.java" target-dir="src/com/vayapedal/ConfigurationManager" />
+    </platform>
+</plugin>

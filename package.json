@@ -1,0 +1,23 @@
+{
+    "name": "cordova-plugin-configuration-manager",
+    "version": "1.0.0",
+    "description": "A Cordova plugin for managing configurations",
+    "author": "Diego Santiago",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tu-usuario/cordova-plugin-configuration-manager.git"
+    },
+    "keywords": [
+        "cordova",
+        "plugin",
+        "configuration",
+        "manager"
+    ],
+    "cordova": {
+        "id": "cordova-plugin-configuration-manager",
+        "platforms": [
+            "android"
+        ]
+    }
+}
