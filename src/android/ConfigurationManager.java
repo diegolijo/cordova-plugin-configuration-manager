@@ -246,7 +246,7 @@ public class ConfigurationManager extends CordovaPlugin {
     );
     jsonSettings.put(
       createSettingObject(
-        "android.provider.AlarmClock.ACTION_SHOW_ALARMS",
+        "android.intent.action.SHOW_ALARMS",
         "Configuración de la alarma",
         false,
         "com.android.alarm.permission.SET_ALARM"
