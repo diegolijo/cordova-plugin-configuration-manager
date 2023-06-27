@@ -30,7 +30,8 @@ cordova.plugins.ConfigurationManager.launchSettings(
     });
 ```
 
-Replace `"android.settings.ACTION_WIFI_SETTINGS"` with the specific setting key you want to launch. You can refer to the complete list of setting keys in the [settings-android.json](./settings-android.json) file.
+Replace `"android.settings.ACTION_WIFI_SETTINGS"` with the specific intent action you want to launch. You can refer to the list of tested intent actions in the [settings-android.json](./settings-android.json) file. Alternatively, you can use any other valid intent action for launching the desired activity.
+
 
 ## Contribution
 
