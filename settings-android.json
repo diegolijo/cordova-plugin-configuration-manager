@@ -88,7 +88,7 @@
             "key": "android.intent.action.SHOW_ALARMS",
             "description": "Show alarms",
             "app": false,
-            "permission": "none"
+            "permission": "com.android.alarm.permission.SET_ALARM"
         },
         {
             "key": "android.settings.ACTION_AIRPLANE_MODE_SETTINGS",
