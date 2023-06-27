@@ -1,0 +1,178 @@
+{
+    "settings": [
+        {
+            "key": "android.settings.ACTION_DISPLAY_SETTINGS",
+            "description": "Display settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_LOCALE_SETTINGS",
+            "description": "Locale settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_INTERNAL_STORAGE_SETTINGS",
+            "description": "Internal storage settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_APPLICATION_SETTINGS",
+            "description": "Application settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_SOUND_SETTINGS",
+            "description": "Sound settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_WIFI_SETTINGS",
+            "description": "Wi-Fi settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_WIFI_IP_SETTINGS",
+            "description": "Wi-Fi IP settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_BLUETOOTH_SETTINGS",
+            "description": "Bluetooth settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_LOCATION_SOURCE_SETTINGS",
+            "description": "Location source settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM",
+            "description": "Request schedule exact alarm",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_USAGE_ACCESS_SETTINGS",
+            "description": "Usage access settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_APP_SEARCH_SETTINGS",
+            "description": "App search settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_BATTERY_SAVER_SETTINGS",
+            "description": "Battery saver settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_DREAM_SETTINGS",
+            "description": "Dream settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.intent.action.SHOW_ALARMS",
+            "description": "Show alarms",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_AIRPLANE_MODE_SETTINGS",
+            "description": "Airplane mode settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_ACCESSIBILITY_SETTINGS",
+            "description": "Accessibility settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS",
+            "description": "Manage default apps",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS",
+            "description": "Manage all applications",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS",
+            "description": "Application development settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS",
+            "description": "Zen mode priority settings",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_MANAGE_OVERLAY_PERMISSION",
+            "description": "Manage overlay permission",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_REQUEST_MANAGE_MEDIA",
+            "description": "Request manage media",
+            "app": false,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_APP_NOTIFICATION_SETTINGS",
+            "description": "App notification settings",
+            "app": true,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_APP_NOTIFICATION_BUBBLE_SETTINGS",
+            "description": "App notification bubble settings",
+            "app": true,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_APPLICATION_DETAILS_SETTINGS",
+            "description": "Application details settings",
+            "app": true,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES",
+            "description": "Manage unknown app sources",
+            "app": true,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS",
+            "description": "App open by default settings",
+            "app": true,
+            "permission": "none"
+        },
+        {
+            "key": "android.settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION",
+            "description": "Manage app all files access permission",
+            "app": true,
+            "permission": "android.permission.MANAGE_EXTERNAL_STORAGE"
+        }
+    ]
+}
