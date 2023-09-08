@@ -6,9 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.AlarmClock;
 import android.provider.Settings;
 import android.util.Log;
 import androidx.annotation.RequiresApi;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -18,40 +23,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ConfigurationManager extends CordovaPlugin {
-
-  // ****************** sin paquete *****************
-
-  // Settings.ACTION_DISPLAY_SETTINGS                         -> config general de pantalla
-  // Settings.ACTION_LOCALE_SETTINGS                          -> config regional
-  // Settings.ACTION_INTERNAL_STORAGE_SETTINGS                -> resumen almacenamiento
-  // Settings.ACTION_APPLICATION_SETTINGS                     -> lista de aplicaciones
-  // Settings.ACTION_SOUND_SETTINGS                           -> config sonido
-  // Settings.ACTION_WIFI_SETTINGS
-  // Settings.ACTION_WIFI_IP_SETTINGS
-  // Settings.ACTION_BLUETOOTH_SETTINGS
-  // Settings.ACTION_LOCATION_SOURCE_SETTINGS
-  // Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM             -> programar alarmas
-  // Settings.ACTION_USAGE_ACCESS_SETTINGS
-  // Settings.ACTION_APP_SEARCH_SETTINGS                      -> buscar en la configuracion de la app
-  // Settings.ACTION_BATTERY_SAVER_SETTINGS                   -> uso bateria
-  // Settings.ACTION_DREAM_SETTINGS                           -> salva pantallas
-  // AlarmClock.ACTION_SHOW_ALARMS                            -> configuracion de alarma    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-  // Settings.ACTION_AIRPLANE_MODE_SETTINGS                   -> modo avión
-  // Settings.ACTION_ACCESSIBILITY_SETTINGS                   -> accesivilidad
-  // Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS             -> aplicaciones predeterminadas en Android
-  // Settings.ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS         -> Todas las apps
-  // Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS         -> Opciones de sesarrollador
-  // Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS               -> No molestar
-  // Settings.ACTION_MANAGE_OVERLAY_PERMISSION                -> Mostrar encima de otras apps
-  // Settings.ACTION_REQUEST_MANAGE_MEDIA                     -> Aplicacion con permiso gestion multimedia
-
-  //************** necesitan paquete de app **************
-  // Settings.ACTION_APP_NOTIFICATION_SETTINGS               -> (Extra)  notificaciones
-  // Settings.ACTION_APP_NOTIFICATION_BUBBLE_SETTINGS        -> (Extra)  burbujas de notificaciones
-  // Settings.ACTION_APPLICATION_DETAILS_SETTINGS            -> (URI)    config general de la app
-  // Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES              -> (URI)    permisos instalar apps fuentes desconocidas
-  // Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS            -> (URI)    Abrir enlaces permitidos
-  // Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION  -> (URI)    Acceso a todos los archivos necestita   <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
   @Override
   protected void pluginInitialize() {
@@ -66,14 +37,27 @@ public class ConfigurationManager extends CordovaPlugin {
     CallbackContext callbackContext
   ) throws JSONException {
     if (action.equals("launchSettings")) {
-      String settingAction = args.optString(0);
+      Object actionParam = args.get(0);
+      String settingAction;
+      JSONArray extras = new JSONArray();
 
-      if (settingAction != null && !settingAction.isEmpty()) {
-        launchSettings(callbackContext, settingAction);
-        callbackContext.success();
+      if (actionParam instanceof String) {
+        settingAction = (String) actionParam;
+      } else if (actionParam instanceof JSONObject) {
+        JSONObject params = (JSONObject) actionParam;
+        settingAction = params.optString("action", "");
+        extras = params.optJSONArray("extras");
+      } else {
+        callbackContext.error("Invalid action parameter");
+        return false;
+      }
+
+      if (!settingAction.isEmpty()) {
+        launchSettings(callbackContext, settingAction, extras);
       } else {
         return getAndroidSettings(callbackContext);
       }
+
       return true;
     }
     return false;
@@ -82,20 +66,22 @@ public class ConfigurationManager extends CordovaPlugin {
   @RequiresApi(api = Build.VERSION_CODES.O)
   private void launchSettings(
     CallbackContext callbackContext,
-    String settingAction
+    String settingAction,
+    JSONArray extras
   ) {
     boolean success = false;
     StringBuilder exceptionMessages = new StringBuilder();
     String successMessage = "";
+
     for (int attempt = 0; attempt <= 2; attempt++) {
       try {
         Intent intent = new Intent(settingAction);
-        if (attempt == 1) {
+        if (attempt == 0) {
           intent.putExtra(
             Settings.EXTRA_APP_PACKAGE,
             cordova.getActivity().getPackageName()
           );
-        } else if (attempt == 2) {
+        } else if (attempt == 1) {
           intent.setData(
             Uri.fromParts(
               "package",
@@ -104,28 +90,65 @@ public class ConfigurationManager extends CordovaPlugin {
             )
           );
         }
-        cordova.getActivity().startActivity(intent);
-        success = true;
 
-        if (attempt == 0) {
-          successMessage = "Llamada sin extras";
-        } else if (attempt == 1) {
-          successMessage = "Llamada con extras";
-        } else {
-          successMessage = "Llamada con URI";
+        if (extras != null) {
+          addExtrasToIntent(intent, extras);
         }
 
+        cordova.getActivity().startActivity(intent);
+
+        success = true;
+        switch (attempt) {
+          case 0:
+            successMessage = "Ok, Package extras";
+            break;
+          case 1:
+            successMessage = "Ok. Package URI";
+            break;
+          case 2:
+            successMessage = "Ok, No Package";
+            break;
+        }
         break;
       } catch (Exception e) {
         exceptionMessages.append(e.getMessage()).append("\n");
       }
     }
+
     if (success) {
+      Log.e("***********", successMessage);
+      PluginResult result = new PluginResult(
+        PluginResult.Status.OK,
+        successMessage
+      );
+      callbackContext.sendPluginResult(result);
       callbackContext.success();
     } else {
       callbackContext.error(
         "Error al abrir la configuración: " + exceptionMessages.toString()
       );
+    }
+  }
+
+  private void addExtrasToIntent(Intent intent, JSONArray extras)
+    throws JSONException {
+    for (int i = 0; i < extras.length(); i++) {
+      JSONObject extra = extras.getJSONObject(i);
+      String key = extra.getString("key");
+      Object value = extra.get("value");
+      if (value instanceof Integer) {
+        intent.putExtra(key, (Integer) value);
+      } else if (value instanceof String) {
+        intent.putExtra(key, (String) value);
+      } else if (value instanceof Boolean) {
+        intent.putExtra(key, (Boolean) value);
+      } else if (value instanceof Float) {
+        intent.putExtra(key, (Float) value);
+      } else if (value instanceof Double) {
+        intent.putExtra(key, (Double) value);
+      } else if (value instanceof Long) {
+        intent.putExtra(key, (Long) value);
+      }
     }
   }
 
@@ -246,7 +269,7 @@ public class ConfigurationManager extends CordovaPlugin {
     );
     jsonSettings.put(
       createSettingObject(
-        "android.intent.action.SHOW_ALARMS",
+        "android.provider.AlarmClock.ACTION_SHOW_ALARMS",
         "Configuración de la alarma",
         false,
         "com.android.alarm.permission.SET_ALARM"
@@ -396,6 +419,38 @@ public class ConfigurationManager extends CordovaPlugin {
     }
     return settingObject;
   }
+  // ****************** sin paquete *****************
 
+  // Settings.ACTION_DISPLAY_SETTINGS                         -> config general de pantalla
+  // Settings.ACTION_LOCALE_SETTINGS                          -> config regional
+  // Settings.ACTION_INTERNAL_STORAGE_SETTINGS                -> resumen almacenamiento
+  // Settings.ACTION_APPLICATION_SETTINGS                     -> lista de aplicaciones
+  // Settings.ACTION_SOUND_SETTINGS                           -> config sonido
+  // Settings.ACTION_WIFI_SETTINGS
+  // Settings.ACTION_WIFI_IP_SETTINGS
+  // Settings.ACTION_BLUETOOTH_SETTINGS
+  // Settings.ACTION_LOCATION_SOURCE_SETTINGS
+  // Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM             -> programar alarmas
+  // Settings.ACTION_USAGE_ACCESS_SETTINGS
+  // Settings.ACTION_APP_SEARCH_SETTINGS                      -> buscar en la configuracion de la app
+  // Settings.ACTION_BATTERY_SAVER_SETTINGS                   -> uso bateria
+  // Settings.ACTION_DREAM_SETTINGS                           -> salva pantallas
+  // AlarmClock.ACTION_SHOW_ALARMS                            -> configuracion de alarma    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+  // Settings.ACTION_AIRPLANE_MODE_SETTINGS                   -> modo avión
+  // Settings.ACTION_ACCESSIBILITY_SETTINGS                   -> accesivilidad
+  // Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS             -> aplicaciones predeterminadas en Android
+  // Settings.ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS         -> Todas las apps
+  // Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS         -> Opciones de sesarrollador
+  // Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS               -> No molestar
+  // Settings.ACTION_MANAGE_OVERLAY_PERMISSION                -> Mostrar encima de otras apps
+  // Settings.ACTION_REQUEST_MANAGE_MEDIA                     -> Aplicacion con permiso gestion multimedia
+
+  //************** necesitan paquete de app **************
+  // Settings.ACTION_APP_NOTIFICATION_SETTINGS               -> (Extra)  notificaciones
+  // Settings.ACTION_APP_NOTIFICATION_BUBBLE_SETTINGS        -> (Extra)  burbujas de notificaciones
+  // Settings.ACTION_APPLICATION_DETAILS_SETTINGS            -> (URI)    config general de la app
+  // Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES              -> (URI)    permisos instalar apps fuentes desconocidas
+  // Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS            -> (URI)    Abrir enlaces permitidos
+  // Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION  -> (URI)    Acceso a todos los archivos necestita   <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
 }
