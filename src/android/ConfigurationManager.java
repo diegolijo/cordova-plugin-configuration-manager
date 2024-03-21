@@ -77,11 +77,6 @@ public class ConfigurationManager extends CordovaPlugin {
       try {
         Intent intent = new Intent(settingAction);
         if (attempt == 0) {
-          intent.putExtra(
-            Settings.EXTRA_APP_PACKAGE,
-            cordova.getActivity().getPackageName()
-          );
-        } else if (attempt == 1) {
           intent.setData(
             Uri.fromParts(
               "package",
@@ -89,9 +84,14 @@ public class ConfigurationManager extends CordovaPlugin {
               null
             )
           );
+        } else if (attempt == 1) {
+          intent.putExtra(
+            Settings.EXTRA_APP_PACKAGE,
+            cordova.getActivity().getPackageName()
+          );
         }
 
-        if (extras != null) {
+        if (extras != null && extras.length() > 0) {
           addExtrasToIntent(intent, extras);
         }
 
