@@ -100,10 +100,10 @@ public class ConfigurationManager extends CordovaPlugin {
         success = true;
         switch (attempt) {
           case 0:
-            successMessage = "Ok, Package extras";
+            successMessage = "Ok. Package URI";
             break;
           case 1:
-            successMessage = "Ok. Package URI";
+            successMessage = "Ok, Package extras";
             break;
           case 2:
             successMessage = "Ok, No Package";
