@@ -1,20 +1,16 @@
 package com.vayapedal.configuration;
 
 import android.app.AlarmManager;
-import android.app.PendingIntent;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.AlarmClock;
 import android.provider.Settings;
 import android.util.Log;
+
 import androidx.annotation.RequiresApi;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Calendar;
+
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
@@ -57,12 +53,23 @@ public class ConfigurationManager extends CordovaPlugin {
       } else {
         return getAndroidSettings(callbackContext);
       }
-
+      return true;
+    } else if (action.equals("canScheduleExactAlarms")) {
+      canScheduleExactAlarms(callbackContext);
       return true;
     }
     return false;
   }
 
+  private void canScheduleExactAlarms(CallbackContext callbackContext) {
+    boolean isEnable = true;
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+    AlarmManager alarmManager = (AlarmManager)  cordova.getActivity().getBaseContext().getSystemService(Context.ALARM_SERVICE);
+      isEnable = alarmManager.canScheduleExactAlarms();
+    }
+    callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, isEnable));
+  }
+  
   @RequiresApi(api = Build.VERSION_CODES.O)
   private void launchSettings(
     CallbackContext callbackContext,
