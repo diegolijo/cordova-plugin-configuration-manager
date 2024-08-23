@@ -74,12 +74,19 @@ It sets the timer length to 15 minutes and enables the skipping of the UI.
         });
 
 ```
+In this example:
+
+The action parameter is set to 'android.intent.action.MAIN', which is a standard intent action used to start the main launcher activity of an application. 
+In this case, it is used to trigger the home screen.
+The category parameter is set to 'android.intent.category.HOME', which specifies that the intent is for the home screen.
 
 
 ## Contribution
 
-If you wish to contribute to this plugin, feel free to fork the repository, make your changes, and submit a pull request. We appreciate any kind of contribution, whether it's reporting issues, sending fixes, or adding new features.
+If you wish to contribute to this plugin, feel free to fork the repository, make your changes, and submit a pull request. 
+We appreciate any kind of contribution, whether it's reporting issues, sending fixes, or adding new features.
 
 ## License
 
 This plugin is distributed under the MIT License. See the [LICENSE](./LICENSE) file for more information.
+
