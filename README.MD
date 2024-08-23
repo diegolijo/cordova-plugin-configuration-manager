@@ -15,7 +15,10 @@ cordova plugin add cordova-plugin-configuration-manager
 To use the plugin, make sure that the device and platform are Android compatible. 
 Then, you can call the `launchSettings` method of the `cordova.plugins.configurationManager` object to open a specific setting.
 
-param: action: string | {action: string; extras?: {key: string; value: any; flag: number; category: string}[]}
+param: 
+```typescript
+action: string | {action: string; extras?: {key: string; value: any;}, flag: number; category: string[]}
+```
 
 Here is an example of how to launch the Wi-Fi settings:
 
