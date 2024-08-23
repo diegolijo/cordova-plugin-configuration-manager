@@ -15,13 +15,13 @@ cordova plugin add cordova-plugin-configuration-manager
 To use the plugin, make sure that the device and platform are Android compatible. 
 Then, you can call the `launchSettings` method of the `cordova.plugins.configurationManager` object to open a specific setting.
 
-param : string | {action: string; extras?: {key: string; value: any}[]}
+param: action: string | {action: string; extras?: {key: string; value: any; flag: number; category: string}[]}
 
 Here is an example of how to launch the Wi-Fi settings:
 
 ```javascript
 cordova.plugins.ConfigurationManager.launchSettings(
-    "android.settings.ACTION_WIFI_SETTINGS",
+    "android.settings.WIFI_SETTINGS",
     () => {
         console.log("Setting launched successfully");
     },
@@ -29,13 +29,14 @@ cordova.plugins.ConfigurationManager.launchSettings(
         console.error("Error launching setting: " + error);
     });
 ```
-Replace `"android.settings.ACTION_WIFI_SETTINGS"` with the specific intent action you want to launch. You can refer to the list of tested intent actions in the [settings-android.json](./settings-android.json) file. Alternatively, you can use any other valid intent action for launching the desired activity.
+Replace `"android.settings.WIFI_SETTINGS"` with the specific intent action you want to launch. You can refer to the list of tested intent actions in the [settings-android.json](./settings-android.json) file. Alternatively, you can use any other valid intent action for launching the desired activity.
 
 
 Another example. 
 
 ```javascript
-    cordova.plugins.ConfigurationManager.launchSettings({
+    cordova.plugins.ConfigurationManager.launchSettings(
+        {
             action: 'android.intent.action.SET_TIMER',
             extras: [
                 {
@@ -55,9 +56,25 @@ Another example.
             console.error(error);
         });
 ```
-
 This example demonstrates how to use the launchSettings method with a specific intent action and extras. 
 It sets the timer length to 15 minutes and enables the skipping of the UI. 
+
+```javascript
+
+    cordova.plugins.ConfigurationManager.launchSettings(
+        {
+            action: 'android.intent.action.MAIN',
+            category: 'android.intent.category.HOME'
+        },
+        () => {
+            console.log('app minimize');
+        },
+        (error) => {
+            console.error(error);
+        });
+
+```
+
 
 ## Contribution
 

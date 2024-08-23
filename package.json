@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-configuration-manager",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "A Cordova plugin for managing configurations",
     "author": "Diego Santiago",
     "license": "MIT",
