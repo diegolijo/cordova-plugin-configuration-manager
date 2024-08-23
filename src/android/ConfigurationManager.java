@@ -46,15 +46,15 @@ public class ConfigurationManager extends CordovaPlugin {
                     JSONObject params = (JSONObject) actionParam;
                     settingAction = params.optString("action");
                     extras = params.optJSONArray("extras");
-                    settingCategory = params.optString("category");
-                    settingFlag = params.optInt("flag");
+                    category = params.optString("category");
+                    flag = params.optInt("flag");
                 } else {
                     callbackContext.error("Invalid action parameter");
                     return false;
                 }
 
                 if (!settingAction.isEmpty()) {
-                    launchSettings(callbackContext, settingAction, extras, settingCategory, settingFlag);
+                    launchSettings(callbackContext, settingAction, extras, category, flag);
                 } else {
                     return getAndroidSettings(callbackContext);
                 }

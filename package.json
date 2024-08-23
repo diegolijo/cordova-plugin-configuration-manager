@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-configuration-manager",
-    "version": "1.0.10",
+    "version": "1.0.11",
     "description": "A Cordova plugin for managing configurations",
     "author": "Diego Santiago",
     "license": "MIT",
@@ -19,5 +19,8 @@
         "platforms": [
             "android"
         ]
+    },
+    "scripts": {
+        "tag": "git tag -a 1.0.10 cbf3e7520f0fad688431311c2cabebcc6c34434c -m \" intent 'category' 'flag' params\" && git push origin --tags"
     }
 }
