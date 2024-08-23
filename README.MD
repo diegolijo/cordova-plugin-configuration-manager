@@ -64,6 +64,7 @@ It sets the timer length to 15 minutes and enables the skipping of the UI.
     cordova.plugins.ConfigurationManager.launchSettings(
         {
             action: 'android.intent.action.MAIN',
+            flag: 268435456, // Intent.FLAG_ACTIVITY_NEW_TASK
             category: 'android.intent.category.HOME'
         },
         () => {
