@@ -17,7 +17,7 @@ Then, you can call the `launchSettings` method of the `cordova.plugins.configura
 
 param: 
 ```typescript
-action: string | {action: string; extras?: {key: string; value: any;}, flag: number; category: string[]}
+action: string | {action: string; extras?: {key: string; value: any;}, flag?: number; category?: string[]}
 ```
 
 Here is an example of how to launch the Wi-Fi settings:
